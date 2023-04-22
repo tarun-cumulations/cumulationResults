@@ -1,12 +1,12 @@
 const axios = require('axios')
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 const fs = require('fs')
-const RESPONSE_SHEET_ID = "1y1Nmo0nhA0wKS-ooUr7aX9HseO0xq14uoBxJKkd46Gg"
+const RESPONSE_SHEET_ID = "1y1Nmo0nhA0wKS-ooUr7aX9HseO0xq14uoBxJKkd46Gg";
 const doc = new GoogleSpreadsheet(RESPONSE_SHEET_ID)
 const credentials = JSON.parse(fs.readFileSync('googleCreds.json'))
 const express = require('express');
 const cron = require('node-cron');
- 
+require('dotenv').config()
 const app = express()
 
 const PORT = process.env.PORT || 4000
@@ -45,7 +45,7 @@ async function verifyAnwers(){
               headers: {
                 "Content-Type": "application/json",
                 Authorization:
-                  "Bearer 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",
+                  "Bearer "+process.env.OPEN_AI_APIKEY,
               },
             }
           );
@@ -141,8 +141,9 @@ async function verifyAnwers(){
 }
 
 
-//54 11 * * *   - 11:54
-//0 0 * * * - 1
+//   - 11:54
+//0 0 * * * - 12AM
+//53 12 * * *
 cron.schedule('0 0 * * *', async() => {
 
     console.log("CRON EXECUTED")
